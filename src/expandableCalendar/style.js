@@ -43,6 +43,9 @@ export default function styleConstructor(theme = {}) {
       borderRadius: 3,
       backgroundColor: '#e8ecf0'
     },
+    selectedSectionContainer: {
+      borderBottomWidth: 2,
+    },
     sectionText: {
       backgroundColor: appStyle.calendarBackground,
       color: '#7a92a5',

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { SectionList, Text } from 'react-native';
+import { SectionList, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
@@ -120,14 +120,12 @@ class AgendaList extends Component {
   }
 
   renderSectionHeader = ({ section: { title } }) => {
-    const today = XDate().toString(this.props.dayFormat);
     const date = XDate(title).toString(this.props.dayFormat);
-    const todayString = XDate.locales[XDate.defaultLocale].today || commons.todayString;
-    const sectionTitle = date === today ? `${todayString.toUpperCase()}, ${date}` : date;
+    const selectedDate = this.props.context.date;
 
-    return (
-      <Text allowFontScaling={false} style={[this.style.sectionText, this.props.sectionStyle]} onLayout={this.onHeaderLayout}>{sectionTitle}</Text>
-    );
+    return (<View style={title === selectedDate && [this.style.selectedSectionContainer, this.props.selectedSectionContainerStyle]}>
+      <Text allowFontScaling={false} style={[this.style.sectionText, this.props.sectionStyle, title === selectedDate && this.props.selectedSectionStyle]} onLayout={this.onHeaderLayout}>{date}</Text>
+    </View>);
   }
 
   keyExtractor = (item, index) => String(index);
