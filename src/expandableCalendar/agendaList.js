@@ -29,7 +29,8 @@ class AgendaList extends Component {
   }
 
   static defaultProps = {
-    dayFormat: 'dddd, MMM d'
+    dayFormat: 'dddd, MMM d',
+    setDateOnScroll: false,
   }
 
   constructor(props) {
@@ -89,7 +90,7 @@ class AgendaList extends Component {
       const topSection = _.get(viewableItems[0], 'section.title');
       if (topSection && topSection !== this._topSection) {
         this._topSection = topSection;
-        if (this.didScroll) { // to avoid setDate() on first load (while setting the initial context.date value)
+        if (this.didScroll && this.props.setDateOnScroll) { // to avoid setDate() on first load (while setting the initial context.date value)
           _.invoke(this.props.context, 'setDate', this._topSection, UPDATE_SOURCES.LIST_DRAG);
         }
       }
@@ -103,6 +104,12 @@ class AgendaList extends Component {
     _.invoke(this.props, 'onScroll', event);
   }
 
+  onScrollEndDrag = (event) => {
+    if(!this.props.setDateOnScroll){
+      _.invoke(this.props.context, 'setDate', this._topSection, UPDATE_SOURCES.LIST_DRAG);
+    }
+  }
+
   onMomentumScrollBegin = (event) => {
     _.invoke(this.props.context, 'setDisabled', true);
     _.invoke(this.props, 'onMomentumScrollBegin', event);
@@ -113,6 +120,9 @@ class AgendaList extends Component {
     this.sectionScroll = false;
     _.invoke(this.props.context, 'setDisabled', false);
     _.invoke(this.props, 'onMomentumScrollEnd', event);
+    if(!this.props.setDateOnScroll){
+      _.invoke(this.props.context, 'setDate', this._topSection, UPDATE_SOURCES.LIST_DRAG);
+    }
   }
 
   onHeaderLayout = ({ nativeEvent }) => {
@@ -141,6 +151,7 @@ class AgendaList extends Component {
         viewabilityConfig={this.viewabilityConfig}
         renderSectionHeader={this.renderSectionHeader}
         onScroll={this.onScroll}
+        onScrollEndDrag={this.onScrollEndDrag}
         onMomentumScrollBegin={this.onMomentumScrollBegin}
         onMomentumScrollEnd={this.onMomentumScrollEnd}
         stickySectionHeadersEnabled
