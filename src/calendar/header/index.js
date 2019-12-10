@@ -10,7 +10,7 @@ import {CHANGE_MONTH_LEFT_ARROW, CHANGE_MONTH_RIGHT_ARROW} from '../../testIDs';
 
 class CalendarHeader extends Component {
   static displayName = 'IGNORE';
-  
+
   static propTypes = {
     theme: PropTypes.object,
     hideArrows: PropTypes.bool,
@@ -133,8 +133,8 @@ class CalendarHeader extends Component {
         <View style={this.style.header}>
           {leftArrow}
           <View style={{ flexDirection: 'row' }}>
-            <Text allowFontScaling={false} style={this.style.monthText} accessibilityTraits='header'>
-              {this.props.month.toString(this.props.monthFormat)}
+            <Text allowFontScaling={false} style={[this.style.monthText, this.props.shouldHideMonthHeader && this.style.monthTextHeadless]} accessibilityTraits='header'>
+              {!this.props.shouldHideMonthHeader && this.props.month.toString(this.props.monthFormat)}
             </Text>
             {indicator}
           </View>
@@ -145,12 +145,12 @@ class CalendarHeader extends Component {
           <View style={this.style.week}>
             {this.props.weekNumbers && <Text allowFontScaling={false} style={this.style.dayHeader}></Text>}
             {weekDaysNames.map((day, idx) => (
-              <Text 
-                allowFontScaling={false} 
-                key={idx} 
-                accessible={false} 
-                style={this.style.dayHeader} 
-                numberOfLines={1} 
+              <Text
+                allowFontScaling={false}
+                key={idx}
+                accessible={false}
+                style={this.style.dayHeader}
+                numberOfLines={1}
                 importantForAccessibility='no'
               >
                 {day}
